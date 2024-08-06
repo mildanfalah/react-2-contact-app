@@ -1,5 +1,3 @@
-import { getContacts } from "./data";
-
 const BASE_URL = "https://contact-api.dicoding.dev/v1";
 
 function getAccessToken() {
@@ -7,7 +5,7 @@ function getAccessToken() {
 }
 
 function putAccessToken(accessToken) {
-  return localStorage.setItem("accesToken", accessToken);
+  return localStorage.setItem("accessToken", accessToken);
 }
 
 async function fetchWithToken(url, options = {}) {
@@ -80,7 +78,7 @@ async function addContact({ name, tag }) {
 
   const responseJson = await response.json();
 
-  if (responseJson !== "success") {
+  if (responseJson.status !== "success") {
     alert(responseJson.message);
     return { error: true };
   }
@@ -92,7 +90,7 @@ async function getContacts() {
   const response = await fetchWithToken(`${BASE_URL}/contacts`);
   const responseJson = await response.json();
 
-  if (responseJson !== "success") {
+  if (responseJson.status !== "success") {
     alert(responseJson.message);
     return { error: true, data: [] };
   }
@@ -105,9 +103,9 @@ async function deleteContact(id) {
     method: "DELETE",
   });
 
-  const responseJson = response.json();
+  const responseJson = await response.json();
 
-  if (responseJson !== "success") {
+  if (responseJson.status !== "success") {
     alert(responseJson.message);
     return { error: true };
   }
